@@ -1,0 +1,89 @@
+<div class="text-center" *ngIf="!hayrecetas">
+  <img src="assets/images/chefcito.png" class="rounded imgchefcito" alt="Chefcito" style="width: 30%; position: relative;">
+  <h1 class="display-1">No hay recetas que mostrar</h1>
+</div>
+
+
+
+<div class="contenido" *ngIf="hayrecetas">
+  <div class="d-flex justify-content-center align-items-center my-lg-5 my-sm-3">
+    <div class="card card1 shadow" id="divult" style="max-width: 700px;" >
+      <div class="row g-0">
+        <div class="col-md-5 col-lg-6 "  style="max-height: 400px;">
+          <img *ngIf="ultReceta?.imagen; else noImg" [src]="ultReceta?.imagen" class="card-img-top img-cuadrada "
+            alt="Imgen de comida" id="ult-img" style="height: 100%; width: 100%;">
+          <ng-template #noImg>
+            <img  src="assets/images/noimg.png" class="card-img-top img-cuadrada "
+              alt="Imgen de comida" id="ult-img" style="height: 100%; width: 100%;">
+          </ng-template>
+        </div>
+        <div class="col-md-6 my-4 d-flex flex-column ">
+          <div class="card-body">
+            <h5 class="card-title"> {{ ultReceta?.nombre }} </h5>
+            <p class="card-text truncar1"> Tiempo: {{ ultReceta?.tiempo }}
+              <br> Porciones: {{ ultReceta?.porciones }}
+              <br> Porciones: {{ ultReceta?.porciones }}
+            </p>
+            <div>
+              <td ></td>
+              <span [innerHTML]="ultReceta!.descripcion | safeHtml" class="truncar1" ></span>
+            </div>
+          </div>
+        <div class="card-footer">
+          <button class="btn-primary-a" (click)="navegar(ultReceta!.nombre)" >Ver Receta</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class=" py-3 mx-auto " style="width: 100%;  background-color: #e3bd7f;">
+    <div class="input-group mx-auto busqueda" style="max-width: 600px;">
+      <input type="text" class="form-control inputbusqueda " placeholder="Pastel de Pollo" (keyup)="busTtl()" #bttl>
+      <button class=" btn-outline-success2-a" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+  </div>
+
+
+  <!--  ---------------------------------------- FOR CON LOS ELEMENTOS EN EL LOCALSTORAGE --------------------------------------- -->
+
+  <div class="container containerCARU d-flex ">
+    <div class="container d-flex carrusell"
+    (mouseenter)="detenerDesplazamiento()" (mouseleave)="iniciarAutoDesplazamiento()">
+        <div class="co my-5" *ngFor="let receta of recetas; let i = index;">
+
+
+
+          <div class="card h-100 cardC" #card>
+            <img *ngIf="receta.imagen; else noImg" [src]="receta.imagen" class="card-img-top img-cuadrada " alt="...">
+            <ng-template #noImg>
+              <img  src="assets/images/noimg.png" class="card-img-top img-cuadrada " alt="...">
+            </ng-template>
+
+            <div class="card-body">
+              <h5 class="card-title">{{ receta.nombre }}</h5>
+              <p class="card-text truncar"> Tiempo: {{ receta.tiempo }}
+                <br> Porciones: {{ receta.porciones }}
+                <br> Dificultad: {{ receta.dificultad }}</p>
+            </div>
+            <div class="card-footer">
+              <button class="btn-primary-a" (click)="navegar(receta.nombre)" >Ver Receta</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="flecha flechai" (click)="envio('pasada')" #flede>
+        <i class="fa-solid fa-chevron-left"></i>
+      </div>
+      <div class="flecha flechad" (click)="envio('siguiente')" #fleiz >
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+  </div>
+</div>
+
+
+<div class="addnew">
+  <button class="addnewb" (click)="irCrear()"><i class="fa-solid fa-plus"></i></button>
+</div>

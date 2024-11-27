@@ -1,0 +1,98 @@
+
+
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="text-center my-lg-3 col-lg-4" >
+      <img *ngIf="receta.imagen; else noImg" [src]="receta.imagen" class="card-img-top img-cuadrada "
+        alt="Imgen de comida" id="ult-img" style="height: 100%; width: 100%;">
+      <ng-template #noImg>
+        <img  src="assets/images/noimg.png" class="card-img-top img-cuadrada "
+          alt="Imgen de comida" id="ult-img" style="height: 100%; width: 100%;">
+      </ng-template>
+    </div>
+
+    <div class="col-lg-7 d-flex align-items-center">
+      <div class="mx-auto">
+        <div class="text-center">
+          <h1 class="display-1"> {{ receta.nombre }} </h1>
+        </div>
+
+        <div class="container text-center">
+          <hr>
+          <div class="row">
+            <div class="col">
+              <div>
+                <i class="fa-regular fa-clock iview"></i>
+                <h1 class="display-4"> Tiempo</h1>
+                <p class="pview">{{ receta.tiempo }}</p>
+              </div>
+            </div>
+            <div class="col ">
+              <div>
+                <i class="fa-regular fa-user iview"></i>
+                <h1 class="display-4"> Porciones</h1>
+                <p class="pview">{{ receta.porciones }}</p>
+              </div>
+            </div>
+            <div class="col ">
+              <div>
+                <div *ngIf="receta.dificultad == 'Fácil';">
+                  <i class="fa-solid fa-spoon iview"></i>
+                </div>
+                <div *ngIf="receta.dificultad == 'Medio';">
+                  <i class="fa-solid fa-spoon iview"></i>
+                  <i class="fa-solid fa-spoon iview"></i>
+                </div>
+                <div *ngIf="receta.dificultad == 'Avanzado';">
+                  <i class="fa-solid fa-spoon iview"></i>
+                  <i class="fa-solid fa-spoon iview"></i>
+                  <i class="fa-solid fa-spoon iview"></i>
+                </div>
+                <h1 class="display-4"> Dificultad</h1>
+                <p class="pview">{{ receta.dificultad }}</p>
+              </div>
+            </div>
+          </div>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row ingEs p-4 mt-3 shadow">
+    <div class="col mx-3 " >
+      <div>
+        <div class="text-center">
+          <h1 class="display-2 sting">Ingredientes</h1>
+        </div>
+        <!-- -------------------------------Se conoca con un for entre los ingredientes ---------------------- -->
+        <div class="form-check my-3" *ngFor="let ingrediente of receta.ingredientes; let i = index">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            (change)="marcarIngrediente(i)"
+            [checked]="ingredientesMarcados[i]"
+          >
+          <label
+            class="form-check-label"
+            [ngClass]="{ 'tachado': ingredientesMarcados[i] }">
+            {{ ingrediente }}
+          </label>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-8 descdiv" >
+      <div class="text-center">
+        <h1 class="display-2 sting" >Preparación</h1>
+      </div>
+      <span [innerHTML]="receta.descripcion | safeHtml" class="textpre" ></span>
+    </div>
+  </div>
+</div>
+
+<div class="addnew justify-content-end">
+  <button class="addnewb" (click)="irCrear()"><i class="fa-solid fa-plus"></i></button>
+</div>
+
+

@@ -1,0 +1,198 @@
+<div class="container-sm pt-lg-3">
+  <div class="mb-lg-4 my-3 text-center">
+    <h1 class="display-1">Ingresar Nueva Receta</h1>
+  </div>
+
+  <form id="receta" class=" d-flex flex-column mb-3 shadow" [formGroup]="nReceta" (ngSubmit)="to_val()">
+    <div class="row">
+      <div class="mb-3 col-lg-6" x>
+        <label id="dorp-area" style="height: 100%; min-height: 300px;">
+          <input class="form-control" type="file" id="formFile" formControlName = 'img'
+          accept="image/png, image/jpeg, image/jpg" hidden (change)="hola()" >
+          <div class="d-flex justify-content-center align-items-center n-img img-cuadrada"
+          [ngClass]="{'simg': simg}" [style.background]="backgroundImageUrl" title="click para cambiar imagen" >
+            <div class="text-center" >
+              <i class="fa-solid fa-cloud-arrow-up" *ngIf="!simg"></i>
+              <p class="display-2" *ngIf="!simg">Click aqui para subir foto</p>
+            </div>
+            <div class="align-self-end contrash">
+              <i class="fa-solid fa-trash" *ngIf="simg" (click)="sevaimg()" ></i>
+            </div>
+          </div>
+        </label>
+      </div>
+
+
+      <div class="mb-3 col-lg-6 col-md-8">
+        <label for="formFile" class="form-label display-2" >Titulo de Receta</label>
+
+        <input type="text" class="form-control" formControlName= "ttl"
+        placeholder="Agregar titulo" >
+        <span *ngIf="validarEspacio('ttl')"></span>
+        <span *ngIf="valido('ttl')" class="text-danger">  {{ saberError('ttl') }}</span>
+
+
+        <div class="mt-4">
+          <div class="row g-sm-5">
+            <div class="col-6 ncat">
+              <label for="quantity" class="display-2">Porciones</label>
+              <input type="number"class="form-control " min="1" max="1000" formControlName = 'por'
+                value="2">
+              <span *ngIf="valido('por')" class="text-danger">  {{ saberError('por') }}</span>
+            </div>
+
+            <div class="col-6">
+              <div class="row g-5">
+                <div class="col-6">
+                  <label class="display-2">Dificultad</label>
+                </div>
+                <div class="col-6 ayuda">
+                  <i
+                    class="fa-solid fa-question"
+                    placement="left"
+                    ngbTooltip="GeeksforGeeks"
+                  ></i>
+                  <span class="tooltiptext">Selecciona la dificultad <br>1 = facil <br>2 = medio <br>3 = dificil</span>
+                </div>
+              </div>
+              <div class="row difi">
+                <div class="col-3 mt-1"  (click)="setdif(1)"
+                  [style.color]="s1 ? '#4d9da2' : (s2 ? '#4d9da2' : (s3 ? '#4d9da2' : '#020202'))">
+                  <i class="fa-solid fa-spoon nspd"></i>
+                </div>
+                <div class="col-3 mt-1" (click)="setdif(2)"
+                  [style.color]="s2 ? '#4d9da2' : (s3 ? '#4d9da2' : '#020202')">
+                  <i class="fa-solid fa-spoon nspd"
+                  ></i>
+                </div>
+                <div class="col-3 mt-1" (click)="setdif(3)"
+                  [style.color]="s3 ? '#4d9da2' : '#020202'">
+                  <i class="fa-solid fa-spoon nspd"
+                  ></i>
+                </div>
+              </div>
+              <span *ngIf="invalid" class="text-danger"> Seleccionar dificultad</span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 ">
+          <label for="quantity" class="display-2">Tiempo</label>
+          <div class="row mt-4">
+            <div class="col-6">
+              <p-floatLabel>
+              <p-calendar
+                formControlName = 'horaI' [iconDisplay]="'input'" [showIcon]="true"
+                [timeOnly]="true" [hourFormat]="'12'" >
+                  <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                      <i class="pi pi-user pointer-events-none" (click)="clickCallBack($event)"></i>
+                  </ng-template>
+                </p-calendar>
+                <label for="number-input">Hora de Inicio</label>
+              </p-floatLabel>
+            </div>
+
+            <div class="col-6">
+              <p-floatLabel>
+                <p-calendar
+                formControlName = 'horaF' [iconDisplay]="'input'" [showIcon]="true"
+                [timeOnly]="true" [hourFormat]="'12'">
+                  <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                      <i class="pi pi-user pointer-events-none" (click)="clickCallBack($event)"></i>
+                  </ng-template>
+                </p-calendar>
+                <label for="number-input">Hora de Fin</label>
+              </p-floatLabel>
+            </div>
+          </div>
+          <span *ngIf="!valTiempo('horaI', 'horaF')" class="text-danger"> La hora Final debe ser mayor a la hora Inicial</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------------------------------------------------------------------------------------------------------- -->
+    <div class="col-lg-6 col-md-8 mb-3">
+      <label class="form-label display-2"> Agregar ingredientes </label>
+        <div class="input-group" style="width: 100%; height: 45px;">
+          <input class="form-control "[formControl]="newingrediente" placeholder="Agregar nuevo ingrediente">
+          <button (click)="agrNuevo()" class="btn-outline-primary-a" type="button">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+      </div>
+    </div>
+    <!-- validacion de existencia de ingredientes -->
+    <span *ngIf="vacio() == true" class="text-danger"> {{ saberError('ingredientes') }}</span>
+    <div class="col-lg-6 col-md-8 mb-3">
+        <label class=" display-3" *ngIf="ingredientes.controls.length != 0">Listado de Ingredientes</label>
+        <div formArrayName="ingrediente">
+          <div class="mt-3"
+          *ngFor="let favorite of ingredientes.controls; let i = index">
+              <div class="input-group">
+                  <input [formControlName]="i"
+                    class="form-control ">
+                  <button (click)="eliIgre( i )" class="btn btn-outline-danger"
+                  type="button"> <i class="fa-regular fa-circle-xmark"></i>
+                </button>
+              </div>
+            </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-labe display-2 mb-3">Preparación</label>
+      <p-editor
+        #editorRef
+        formControlName="des"
+        [style]="{ height: '320px' }"
+        [placeholder]="'Preparación de la receta...'"
+        [modules]="editorModules" (onTextChange)="largoLetras()" (onTextChange)="contarPalabras()" (onTextChange)="validDescr()" (click)="validDescr()">
+      </p-editor>
+      <p class="contadores">cantidad de caracteres {{largoPreparacion}} <br>
+        cantidad de palabras {{cantidadPreparacion}}
+      </p>
+      <span *ngIf="valDesc" class="text-danger"> Este campo es obligatorio</span>
+    </div>
+
+
+
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn-primary-a mt-lg-3 "> Guardar </button>
+    </div>
+  </form>
+</div>
+
+
+<p-toast />
+<p-confirmDialog #cd>
+    <ng-template pTemplate="headless" let-message>
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+            <div >
+              <lottie-player
+              class="mx-auto"
+              src="{{modalIcon}}"
+              background="transparent"
+              speed="1"
+              autoplay
+              style="width: 200px; height: 200px;">
+            </lottie-player>
+            </div>
+            <span class="fw-bold fs-3 block mb-2 mt-4">
+              {{ message.header }}
+            </span>
+            <p class="mb-0 mt-2">{{ message.message }}</p>
+            <div class="text-center g-5 mt-4">
+                <button
+                    pButton
+                    label="Aceptar"
+                    (click)="cd.accept()"
+                    class="btn-modal">
+                </button>
+                <button
+                    pButton
+                    label="Cancelar"
+                    (click)="cd.reject()"
+                    class="btn-outline-modal">
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+

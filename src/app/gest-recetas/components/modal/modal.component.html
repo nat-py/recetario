@@ -1,0 +1,34 @@
+
+<div class="card flex justify-content-center">
+  <p-toast />
+  <p-confirmDialog #cd2>
+      <ng-template pTemplate="headless" let-message>
+          <div class="flex flex-column align-items-center p-4 surface-overlay border-round">
+              <div class="">
+                <lottie-player
+                  class="mx-auto"
+                  src="assets/icons/success.json"
+                  background="transparent"
+                  speed="1"
+                  autoplay
+                  style="width: 200px; height: 200px;">
+                </lottie-player>
+              </div>
+              <span class="fw-bold fs-3 block mb-2 mt-4">
+                  {{ message.header }}
+              </span>
+              <p class="mb-0 mt-2">{{ message.message }}</p>
+              <div class="text-center g-5 mt-4">
+
+                  <button
+                      pButton
+                      label="Aceptar"
+                      (click)="cd2.accept()"
+                      class="btn-modal">
+                  </button>
+              </div>
+          </div>
+      </ng-template>
+  </p-confirmDialog>
+</div>
+
