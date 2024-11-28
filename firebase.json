@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "recetario",
+    "public": "dist/curso/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
